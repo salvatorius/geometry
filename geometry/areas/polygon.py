@@ -23,7 +23,6 @@ class Polygon:
                 vertices.append(point)
             else:
                 raise TypeError(f"Expected tuple of 2 floats or Point2D, got {type(point)}")
-            print (vertices)
         self._vertices = np.array(vertices)
 
     @property
