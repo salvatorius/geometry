@@ -6,4 +6,4 @@ class Point2D:
     y: float
 
     def __repr__(self):
-        return f'Point2D <{self.x}, {self.y}>'
+        return f'Point2D<{self.x},{self.y}>'
