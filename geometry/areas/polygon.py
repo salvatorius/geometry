@@ -1,10 +1,9 @@
-from typing import List, Tuple, Union
+from typing import List, Tuple
 import numpy as np
 from numpy.typing import NDArray
 
-from geometry.points import Point2D
+from geometry.points import Point2D, AnyPoint
 
-PointPair = Union[Tuple[float, float], Point2D]
 CoordsTuple = Tuple[NDArray[np.float32],NDArray[np.float32]]
 
 class Polygon:
@@ -14,7 +13,7 @@ class Polygon:
             and len(obj) == 2 \
             and all(isinstance(value, (int, float)) for value in obj)
 
-    def __init__(self, points: List[PointPair]):
+    def __init__(self, points: List[AnyPoint]):
         vertices = []
         for point in points:
             if isinstance(point, Point2D):
