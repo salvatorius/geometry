@@ -1,7 +1,8 @@
 from typing import List, Tuple
 from dataclasses import dataclass
-from pytest import approx, mark, fixture
-from geometry.areas.polygon import Polygon
+import pytest
+
+from geometry import Polygon
 
 @dataclass
 class ParamTestCase:
@@ -10,7 +11,7 @@ class ParamTestCase:
 
 TestCases = List[ParamTestCase]
 
-@fixture
+@pytest.fixture
 def polygons() -> TestCases:
     return [
         # Isosceles Triangle
@@ -42,10 +43,10 @@ def polygons() -> TestCases:
 
 CASE_COUNT = 12
 
-@mark.parametrize("index", range(CASE_COUNT))
+@pytest.mark.parametrize("index", range(CASE_COUNT))
 def test_calc_polygon_area_given_its_points_from_fixture_list_item_by_index(polygons, index):
     # Picking our particular test case for this run
     # by index from the "polygons" fixture
     test_case = polygons[index]
     polygon = Polygon(test_case.points)
-    assert polygon.calc_area() == approx(test_case.area, 1e-04)
+    assert polygon.calc_area() == pytest.approx(test_case.area, 1e-04)

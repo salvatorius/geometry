@@ -1,7 +1,8 @@
 from typing import List, Tuple
 from dataclasses import dataclass
-from pytest import approx, mark
-from geometry.areas.polygon import Polygon
+import pytest
+
+from geometry import Polygon
 
 @dataclass
 class ParamTestCase:
@@ -39,7 +40,7 @@ POLYGONS : TestCases = [
     ]
 
 
-@mark.parametrize("test_case", POLYGONS)
+@pytest.mark.parametrize("test_case", POLYGONS)
 def test_calc_polygon_area_given_its_points_from_constant_list_item(test_case: ParamTestCase):
     polygon = Polygon(test_case.points)
-    assert polygon.calc_area() == approx(test_case.area, 1e-04)
+    assert polygon.calc_area() == pytest.approx(test_case.area, 1e-04)

@@ -2,26 +2,16 @@ from typing import List, Tuple
 import numpy as np
 from numpy.typing import NDArray
 
-from geometry.points import Point2D, AnyPoint
+from geometry import Point2D, PointList, is_valid_point_set
 
-CoordsTuple = Tuple[NDArray[np.float32],NDArray[np.float32]]
+NPCoordsTuple = Tuple[NDArray[np.float32],NDArray[np.float32]]
 
 class Polygon:
-    @staticmethod
-    def _is_valid_tuple(obj) -> bool:
-        return isinstance(obj, tuple) \
-            and len(obj) == 2 \
-            and all(isinstance(value, (int, float)) for value in obj)
-
-    def __init__(self, points: List[AnyPoint]):
-        vertices = []
-        for point in points:
-            if isinstance(point, Point2D):
-                vertices.append((point.x, point.y))
-            elif Polygon._is_valid_tuple(point):
-                vertices.append(point)
-            else:
-                raise TypeError(f"Expected tuple of 2 floats or Point2D, got {type(point)}")
+    def __init__(self, *points: PointList, precision=None, **kwargs):
+        left = points[0] if len(points) == 1 else None
+        values = left if is_valid_point_set(left) else points
+        vertices = [Point2D(point).tuple for point in values]
+        self._precision = precision
         self._vertices = np.array(vertices)
 
     @property
@@ -30,11 +20,11 @@ class Polygon:
 
     @property
     def points(self) -> List[Point2D]:
-        return [Point2D(x, y) for x, y in self._vertices]
+        return [Point2D(float(x), float(y)) for x, y in self._vertices]
 
     @property
     # extract x and y values using array indexing
-    def coordinates(self) -> CoordsTuple:
+    def coordinates(self) -> NPCoordsTuple:
         return self._vertices[:, 0], self._vertices[:, 1]
 
     def calc_area(self) -> float:
@@ -48,4 +38,4 @@ class Polygon:
         return abs(0.5 * np.sum(cross_product))
 
     def __repr__(self):
-        return f'Polygon <{self.n} vertices polygon>'
+        return f'Polygon [{self.n} vertices polygon]'

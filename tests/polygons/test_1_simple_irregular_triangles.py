@@ -1,19 +1,20 @@
-from pytest import mark, fixture
+import pytest
 
-from geometry.areas.polygon import Polygon, Point2D, CoordsTuple
+from tests.constants import TDD
+from geometry import Polygon, Point2D, NPCoordsTuple
 
-@fixture
+@pytest.fixture
 def triangle_coords_1():
     return [(1,2),(2,3),(3,4)]
 
-@fixture
+@pytest.fixture
 def triangle_coords_2():
     return [(5.0,3.0),(0,10.0),(1.0,-1.0)]
 
 
 def test_triangle_instanced_from_its_coordinates(triangle_coords_1):
     triangle = Polygon(triangle_coords_1)
-    coords : CoordsTuple = triangle.coordinates
+    coords : NPCoordsTuple = triangle.coordinates
     assert len(coords) == 2
     x, y = coords
     assert x.shape == y.shape == (3,)
@@ -31,7 +32,7 @@ def test_calc_triangle_area_given_its_3_points(triangle_coords_2):
     assert triangle.calc_area() == 24
 
 # pylint: disable=no-member # justify=TDD
-@mark.xfail(reason='TDD [Still Not Implemented]')
+@pytest.mark.xfail(reason=TDD)
 def test_triangle_perimeter(_3coordinates):
     triangle = Polygon.of(_3coordinates)
     # todo: implement this perimeter method
